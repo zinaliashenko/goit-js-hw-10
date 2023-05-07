@@ -1,8 +1,8 @@
 import './css/styles.css';
 
-// import { debounce } from 'debounce';
+import { debounce } from 'debounce';
 
-// const DEBOUNCE_DELAY = debounce(onTextInput, 300);
+const DEBOUNCE_DELAY = 300;
 
 import { Notify } from 'notiflix';
 import { fetchCountries } from './js/fetchCountries';
@@ -11,16 +11,16 @@ import { createMarkupOneCard, createMarkupNormalCard } from './js/markup';
 const textInputRef = document.querySelector('input#search-box');
 const countryListRef = document.querySelector('.country-list');
 
-textInputRef.addEventListener('input', onTextInput);
-// textInputRef.addEventListener('input', DEBOUNCE_DELAY);
+textInputRef.addEventListener(
+  'input',
+  debounce(onTextInput, DEBOUNCE_DELAY, { leading: true, trailing: false })
+);
 
 async function onTextInput(event) {
   const query = event.currentTarget.value.toLowerCase().trim();
-
   try {
     const countries = await fetchCountries(query);
     const {} = countries;
-    console.log('result:', countries);
 
     if (countries.length === 1) {
       Notify.success(`We found ${countries.length} countries`);
